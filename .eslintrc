@@ -1,3 +1,6 @@
 {
-	"extends": ["plugin:node/recommended", "eslint:recommended"]
+	"extends": ["plugin:node/recommended", "eslint:recommended"],
+	"rules": {
+		"node/no-unpublished-require": "off"
+	}
 }
