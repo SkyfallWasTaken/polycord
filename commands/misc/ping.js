@@ -9,11 +9,14 @@ module.exports = {
 		const sent = await interaction.reply({
 			content: "Pinging...",
 			fetchReply: true,
+			ephemeral: true
 		});
-		interaction.editReply(stripIndents`
-            **Roundtrip latency:** ${
-							sent.createdTimestamp - interaction.createdTimestamp
-						}ms
-            **Websocket heartbeat:** ${interaction.client.ws.ping}ms`);
+		interaction.editReply({
+			content: stripIndents`
+            		**Roundtrip latency:** ${
+									sent.createdTimestamp - interaction.createdTimestamp
+								}ms
+            		**Websocket heartbeat:** ${interaction.client.ws.ping}ms`
+		});
 	},
 };
