@@ -1,8 +1,11 @@
+// @ts-nocheck
 const fs = require("fs");
 const { Client, Collection, Intents } = require("discord.js");
-const { token } = require("./config.js");
 
 const client = new Client({ intents: [Intents.FLAGS.GUILDS] });
+client.secrets = require("./config.js")
+
+const { token } = client.secrets;
 
 const eventFiles = fs
 	.readdirSync("./events")
@@ -16,7 +19,6 @@ for (const file of eventFiles) {
 	}
 }
 
-// @ts-ignore
 client.commands = new Collection();
 const commandFolders = fs.readdirSync("./commands");
 for (const folder of commandFolders) {
@@ -26,7 +28,6 @@ for (const folder of commandFolders) {
 	for (const file of commandFiles) {
 		const command = require(`./commands/${folder}/${file}`);
 		console.log("command added:", command.data.name);
-		// @ts-ignore
 		client.commands.set(command.data.name, command);
 	}
 }

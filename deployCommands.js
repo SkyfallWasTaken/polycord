@@ -18,6 +18,6 @@ for (const folder of commandFolders) {
 const rest = new REST({ version: "9" }).setToken(token);
 
 rest
-	.put(Routes.applicationGuildCommands(clientId, guildId), { body: commands })
-	.then(() => console.log("Successfully registered application commands."))
-	.catch(console.error);
+		.put(Routes.applicationGuildCommands(clientId, guildId), { body: commands })
+		.then(() => console.log("Successfully registered application commands."))
+		.catch(console.error);

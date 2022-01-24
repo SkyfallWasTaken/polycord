@@ -1,3 +1,4 @@
+// @ts-nocheck
 const { SlashCommandBuilder } = require("@discordjs/builders");
 const cachios = require("cachios").default;
 const { MessageEmbed, MessageActionRow, MessageButton } = require("discord.js");
@@ -21,7 +22,10 @@ module.exports = {
 			.get(`https://api.urbandictionary.com/v0/define?${query}`)
 			.then(function (response) {
 				if (response.data.list.length === 0) {
-					return interaction.editReply(`Term **${term}** not found.`);
+					return interaction.editReply({
+						content: `Term **${term}** not found.`,
+						epheremal: true,
+					});
 				}
 
 				const [answer] = response.data.list;
@@ -29,15 +33,13 @@ module.exports = {
 				const row = new MessageActionRow().addComponents(
 					new MessageButton()
 						.setCustomId("thumbs_up")
-						.setLabel(`${answer.thumbs_up}`)
+						.setLabel(`👍 ${answer.thumbs_up}`)
 						.setStyle("SECONDARY")
-						.setEmoji("922512067372650516")
 						.setDisabled(true),
 					new MessageButton()
 						.setCustomId("thumbs_down")
-						.setLabel(`${answer.thumbs_down}`)
+						.setLabel(`👎 ${answer.thumbs_down}`)
 						.setStyle("SECONDARY")
-						.setEmoji("922512067234246708")
 						.setDisabled(true)
 				);
 
@@ -46,7 +48,16 @@ module.exports = {
 					.setTitle(answer.word)
 					.setURL(answer.permalink)
 					.addFields(
-						{ name: "Definition", value: trim(answer.definition, 1024) },
+						{
+							name: "Definition",
+							value: trim(
+								answer.definition.replace(
+									/\[([^\]]+)\]/g,
+									`[$1](https://www.urbandictionary.com/define.php?term=$1)`
+								),
+								1024
+							),
+						},
 						{ name: "Example", value: trim(answer.example, 1024) }
 					);
 
